@@ -25,28 +25,32 @@ def save(): #name the controller will always be the same as the service function
 @cache.cached(timeout=60)
 #@admin_required
 def find_all():
-    all_customers = customeraccountService.find_all()
-    return customeraccnts_schema.jsonify(all_customers),200
+    response,status = customeraccountService.find_all()
+
+    if status!=201:
+        return jsonify(response),status 
+    return customeraccnts_schema.jsonify(response),status
     
 @limiter.limit("5 per minute")
 def update_customeraccnt(id): #name the controller will always be the same as the service function
     try:
         data = request.json
         #try to validate the incoming data, and deserialize
-        customeraccnt=customeraccountService.update_customeraccnt(id,data)
+        response,status=customeraccountService.update_customeraccnt(id,data)
 
-        if not customeraccnt:
-            return jsonify({"message": "Sorry,CustomerAccnt not found!!"}),404
-        else:
-            return customeraccnt_schema.jsonify(customeraccnt), 201
+        if status != 201:
+            return jsonify(response),status
+        return customeraccnt_schema.jsonify(response), status
         
     except ValidationError as e:
         return jsonify(e.messages), 400
     
 @limiter.limit("5 per minute")
 def delete_customeraccnt(id):
-    customeraccnt=customeraccountService.delete_customeraccnt(id)
-    if customeraccnt:
-       return customeraccnt_schema.jsonify(customeraccnt),200
+
+    response,status =customeraccountService.delete_customeraccnt(id)
+    if status!=201:
+       return jsonify(response),status
     else:
-        return jsonify({"message": "Sorry,Customer Account not found!!"}),404
+        return customeraccnts_schema.jsonify(response),status
+

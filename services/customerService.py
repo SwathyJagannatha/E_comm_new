@@ -26,8 +26,6 @@ def login(username,password): #login using unique info so we dont query mutiple 
             "message" : "Invalid username or password"
         }
         return response 
-    
-    pass
 
 def save(customer_data):
     new_customer = Customer(

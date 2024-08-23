@@ -46,15 +46,18 @@ def save(customeraccount_data):
 def find_all():
     query = select(CustomerAccount)
     all_customeraccnts = db.session.execute(query).scalars().all()
-    return all_customeraccnts
+
+    if all_customeraccnts is None:
+        return {"message": "Customer Accounts not found"}, 404
+    return all_customeraccnts,201
 
 def delete_customeraccnt(id):
     if not id:
         print("No ID provided")
-        return jsonify({
-            "status": "fail",
+        return {
+            "status":"Failed",
             "message": "Please provide a customer account id"
-        }), 400
+        }, 400
 
     try:
         print(f"Looking for customer account with id: {id}")
@@ -64,10 +67,10 @@ def delete_customeraccnt(id):
 
         if not customeraccnt:
             print(f"Customer account with id {id} does not exist")
-            return jsonify({
-                "status": "fail",
-                "message": "Customer account does not exist"
-            }), 404
+            return {
+                "status":"Failure",
+                "message": "Customer account with the id does not exist"
+            }, 404
 
         # If found, delete the customer account
         db.session.delete(customeraccnt)
@@ -75,21 +78,19 @@ def delete_customeraccnt(id):
 
         print(f"Customer account with id {id} deleted successfully")
         
-        return jsonify({
-            "message": "Customer account deleted successfully",
-            "status": "success",
+        return{
+            "message":"Successfully deleted",
             "data": {
                 "id": customeraccnt.id,
                 "username": customeraccnt.username,
                 "customer_id": customeraccnt.customer_id
             }
-        }), 200
+        }, 200
 
     except Exception as e:
         db.session.rollback()
         print(f"An error occurred: {str(e)}")
         return jsonify({
-            "status": "fail",
             "message": "An error occurred while trying to delete the customer account"
         }), 500
 
@@ -104,16 +105,31 @@ def update_customeraccnt(id,data):
                 "message":"Customer with that id doesnt exist"
             },404
         
+        query = select(CustomerAccount).where(CustomerAccount.username == data.get("username"))
+        username=db.session.execute(query).scalar()
+
+        if username:
+            return {
+                "status":"failed",
+                "message":"Customer with that name already exists"
+            },404
+        
         customer.username = data.get("username",customer.username)
         customer.password = data.get("password", customer.password)
         customer.customer_id = data.get("customer_id",customer.customer_id)
         
         db.session.commit()
         db.session.refresh(customer)
+
         return{
-            "mesage":"success",
-            "data": customer
-        }
+            "mesage":"success, customeraccnt info updated successfully",
+            "data": {
+                "customer_id": customer.customer_id,
+                "username": customer.username,
+                "password": customer.password
+            }
+        },200
+
     except Exception as e:
          print(f"Exception occured: {e}")
 
