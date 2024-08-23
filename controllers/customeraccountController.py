@@ -14,10 +14,14 @@ def save(): #name the controller will always be the same as the service function
 
     except ValidationError as e:
         return jsonify(e.messages), 400
-    
-    customer_saved = customeraccountService.save(customeraccnt_data)
-    return customeraccnt_schema.jsonify(customeraccnt_data), 201
 
+    response,status = customeraccountService.save(customeraccnt_data)
+
+    if status != 201:
+        return jsonify(response),status 
+    return customeraccnt_schema.jsonify(response), status
+
+    
 @cache.cached(timeout=60)
 #@admin_required
 def find_all():

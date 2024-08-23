@@ -8,56 +8,40 @@ from sqlalchemy.orm import joinedload
 from flask import jsonify
 
 def save(customeraccount_data):
-    
     customer_id = customeraccount_data.get('customer_id')
-    username =  customeraccount_data.get('username')
+    username = customeraccount_data.get('username')
     password = customeraccount_data.get('password')
 
-    customer=db.session.query(Customer).filter_by(id = customer_id).one_or_none()
-
-    if not customer:
-        return {
-            "status":"fail",
-            "message": "Customer id not found"
-            },400
+    # Check if the customer with the given ID exists
+    customer = db.session.query(Customer).filter_by(id=customer_id).one_or_none()
     
-    # try:
-    #     # Fetch the existing CustomerAccount by ID
-    #     customer_account = db.session.query(Customer).filter_by(Customer.id == customer_id).one()
-    # except Exception:
-    #     raise ValueError(f"No CustomerAccount found with ID {customer_id}")
+    if customer is None:
+        return {"message": "Customer ID not found"}, 404
 
+    # Check if the username already exists
     query = select(CustomerAccount).where(CustomerAccount.username == username)
-    username_info=db.session.execute(query).scalar_one_or_none()
+    username_info = db.session.execute(query).scalar_one_or_none()
 
     if username_info:
-        return {
-            "status":"fail",
-            "message": "Username already exists in our system"
-            },400
-    
+        return {"message": "Username already exists in our system"}, 400
+
+    # Create a new CustomerAccount record
     new_customeraccnt = CustomerAccount(
-        password = customeraccount_data['password'],
-        username = customeraccount_data['username'],
-        customer_id = customeraccount_data['customer_id']
+        password=customeraccount_data['password'],
+        username=customeraccount_data['username'],
+        customer_id=customeraccount_data['customer_id']
     )
+
     try:
         db.session.add(new_customeraccnt)
         db.session.commit()
         db.session.refresh(new_customeraccnt)
 
-        return{
-            "message":"Customer account created successfully",
-            "status":"success",
-            "data": new_customeraccnt
-        },201
-    
+        return new_customeraccnt, 201
+
     except Exception as e:
         db.session.rollback()
-        return {
-            "status": "fail",
-            "message": f"Customer account creation failed: {str(e)}"
-        }, 500
+        return {"message": f"Customer account creation failed: {str(e)}"}, 500
 
 def find_all():
     query = select(CustomerAccount)

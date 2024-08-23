@@ -49,16 +49,6 @@ def rate_limit_config():
     limiter.limit("20 per day")(order_blueprint)
 
 
-# @app.route('/sum', methods = ['POST'])
-# def sum():
-#     data = request.get_json()
-#     num1 = data['num1']
-#     num2 = data['num2']
-
-#     result = num1 + num2 
-
-#     return jsonify({"result":result})
-
 app = create_app('DevelopmentConfig')
 
 if __name__ == '__main__':
@@ -71,4 +61,4 @@ if __name__ == '__main__':
         #db.drop_all()
         db.create_all()
 
-    app.run()
+    app.run(port=5001)
