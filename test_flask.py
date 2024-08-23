@@ -16,11 +16,6 @@ class testApi(unittest.TestCase):
         self.client = self.app.test_client()
         self.fake = Faker()
 
-    # def tearDown(self):
-    #     # Tear down the app context and drop the database
-    #     with self.app.app_context():
-    #         db.drop_all()
-
     def test_customer(self):
         # Generate fake customer data
         name = self.fake.name()
