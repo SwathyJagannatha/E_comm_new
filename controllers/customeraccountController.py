@@ -4,6 +4,7 @@ from services import customeraccountService #dont import the individual function
 from marshmallow import ValidationError
 from caching import cache
 from utils.util import token_required,admin_required
+from limiter import limiter
 
 def save(): #name the controller will always be the same as the service function
 
@@ -18,24 +19,12 @@ def save(): #name the controller will always be the same as the service function
     return customeraccnt_schema.jsonify(customeraccnt_data), 201
 
 @cache.cached(timeout=60)
-@admin_required
+#@admin_required
 def find_all():
     all_customers = customeraccountService.find_all()
     return customeraccnts_schema.jsonify(all_customers),200
-
-# def find_all_paginate():
-#     page = int(request.args.get('page'))
-#     per_page = int(request.args.get('per_page'))
-#     customeraccnts = customerService.find_all_paginate(page, per_page)
-#     return customeraccnts_schema.jsonify(customeraccnts), 200
-
-# def delete_customer(id):
-#     customer=customerService.delete_customer(id)
-#     if customer:
-#        return customer_schema.jsonify(customer),200
-#     else:
-#         return jsonify({"message": "Sorry,Customer not found!!"}),404
     
+@limiter.limit("5 per minute")
 def update_customeraccnt(id): #name the controller will always be the same as the service function
     try:
         data = request.json
@@ -50,6 +39,7 @@ def update_customeraccnt(id): #name the controller will always be the same as th
     except ValidationError as e:
         return jsonify(e.messages), 400
     
+@limiter.limit("5 per minute")
 def delete_customeraccnt(id):
     customeraccnt=customeraccountService.delete_customeraccnt(id)
     if customeraccnt:
