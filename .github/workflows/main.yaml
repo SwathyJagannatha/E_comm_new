@@ -70,6 +70,7 @@ jobs:
           python -m pip install -r requirements.txt
       
       - name: Run the tests
+        env:
+          DATABASE_URL: "mysql://root:Swa123sweet@@mysql:3306/advanced_e_comm"
         run: |
-          export DATABASE_URL="mysql+mysqlconnector://root:Swa123sweet%40@localhost:3306/advanced_e_comm"
           python -m unittest discover -s tests -p "test_*.py"
