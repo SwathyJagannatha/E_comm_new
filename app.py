@@ -65,7 +65,7 @@ if __name__ == '__main__':
     rate_limit_config()
 
     with app.app_context():
-        #db.drop_all()
+        db.drop_all()
         db.create_all()
 
     app.run(port=5001)
