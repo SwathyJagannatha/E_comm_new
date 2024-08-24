@@ -44,8 +44,13 @@ def save(customer_data):
 
 def find_all():
     query = select(Customer)
-    all_customers = db.session.execute(query).scalars().all()
-    return all_customers
+    try:
+        all_customers = db.session.execute(query).scalars().all()
+        print("Fetched customers:", all_customers)  # Debug print
+        return all_customers
+    except Exception as e:
+        print("Error fetching customers:", e)  # Error logging
+        return []
 
 def delete_customer(id):
     query = select(Customer).where(Customer.id == id)
