@@ -50,22 +50,22 @@ def rate_limit_config():
     limiter.limit("20 per day")(product_blueprint)
     limiter.limit("20 per day")(order_blueprint)
 
-# app = create_app('ProductionConfig')
+app = create_app('ProductionConfig')
 
-# with app.app_context():
-#         db.drop_all()
-#         db.create_all()
-
-app = create_app('DevelopmentConfig')
-
-if __name__ == '__main__':
-
-    blueprint_config(app)
-
-    rate_limit_config()
-
-    with app.app_context():
+with app.app_context():
         db.drop_all()
         db.create_all()
 
-    app.run(port=5001)
+# app = create_app('DevelopmentConfig')
+
+# if __name__ == '__main__':
+
+#     blueprint_config(app)
+
+#     rate_limit_config()
+
+#     with app.app_context():
+#         db.drop_all()
+#         db.create_all()
+
+#     app.run(port=5001)
