@@ -33,7 +33,7 @@ def create_app(config_name):
     cache.init_app(app)
 
     print('Running')
-    #blueprint_config(app)
+    blueprint_config(app)
 
     return app
 
