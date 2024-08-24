@@ -1,4 +1,4 @@
-name: Flask Testing CI
+name: Flask CI/CD
 
 on:
   push:
@@ -34,6 +34,7 @@ jobs:
           echo "Contents of site-packages: $(ls -l venv/lib/python*/site-packages)"
 
   test:
+    needs: build
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -73,3 +74,13 @@ jobs:
           DATABASE_URL: "mysql://root:Swa123sweet@@mysql:3306/advanced_e_comm"
         run: |
           python -m unittest discover -s tests -p "test_*.py"
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+        - name: Deploy the App
+          env:
+            deploy_url: ${{secrets.RENDER_DEPLOY_HOOK_URL}}
+          run: curl "$deploy_url"
