@@ -10,7 +10,7 @@ class testApi(unittest.TestCase):
         self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Use in-memory database for testing
         
         with self.app.app_context():
-            blueprint_config(self.app)  # Register blueprints
+            #blueprint_config(self.app)  # Register blueprints
             db.drop_all()
             db.create_all()  # Create the database tables
             from models.role import Role
