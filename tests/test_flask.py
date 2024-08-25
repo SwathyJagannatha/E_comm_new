@@ -5,7 +5,7 @@ from app import create_app, blueprint_config, db
 class testApi(unittest.TestCase):
  def setUp(self):
         # Set up the app and the app context
-        self.app = create_app('DevelopmentConfig')
+        self.app = create_app('ProductionConfig')
         self.app.config['TESTING'] = True
         self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Use in-memory database for testing
         
