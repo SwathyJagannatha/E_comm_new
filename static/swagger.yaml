@@ -91,6 +91,41 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
   /customers:
+    post:
+      post:
+    summary: "Create a new customer"
+    description: "This endpoint allows you to create a new customer."
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "John Doe"
+              email:
+                type: string
+                example: "johndoe@example.com"
+              phone:
+                type: string
+                example: "123-456-7890"
+              username:
+                type: string
+                example: "johndoe"
+              password:
+                type: string
+                example: "securepassword"
+              role_id:
+                type: integer
+                example: 1
+    responses:
+      '201':
+        description: "Customer created successfully"
+      '400':
+        description: "Invalid input"
+
     get:
       tags:
         - Customers
@@ -105,6 +140,31 @@ paths:
             $ref: "#/definitions/AllCustomers"
 
   /customeraccnt:
+    post:
+    summary: "Create a new customer account"
+    description: "This endpoint allows you to create a new customer account."
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                example: "johndoe_account"
+              password:
+                type: string
+                example: "securepassword"
+              customer_id:
+                type: integer
+                example: 1
+    responses:
+      '201':
+        description: "Customer account created successfully"
+      '400':
+        description: "Invalid input"
+
     get:
       tags:
         - CustomerAccnt
@@ -169,6 +229,24 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   /products:
+    post:
+      tags:
+        - Products
+      summary: "Create a new product"
+      description: "Endpoint to create a new product"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Product object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/Product"
+      responses:
+        201:
+          description: "Product created successfully"
+        400:
+          description: "Invalid input"
+
     get:
       tags:
         - Products
@@ -311,6 +389,35 @@ paths:
           description: "Role not found"
 
   /orders:
+
+    post:
+    summary: "Create a new order"
+    description: "This endpoint allows you to create a new order."
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+                example: "2024-08-25"
+              customer_id:
+                type: integer
+                example: 1
+              products:
+                type: array
+                items:
+                  type: integer
+                example: [1, 2, 3]
+    responses:
+      '201':
+        description: "Order created successfully"
+      '400':
+        description: "Invalid input"
+
     get:
       tags:
         - Orders
@@ -373,6 +480,23 @@ paths:
 
 definitions:
 
+  Product:
+    type: "object"
+    required:
+      - "name"
+      - "price"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      name:
+        type: "string"
+        example: "Laptop"
+      price:
+        type: "number"
+        format: "float"
+        example: 999.99
+        
   Role:
     type: "object"
     required:
@@ -384,7 +508,7 @@ definitions:
       name:
         type: "string"
         example: "Admin"
-        
+
   LoginPayload:
     type: "object"
     properties:
