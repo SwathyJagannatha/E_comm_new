@@ -1,14 +1,12 @@
 
 from flask import Blueprint,jsonify,request
-from controllers.roleController import save
+from controllers.roleController import save,find_all,update_role,delete_role
 
 role_blueprint = Blueprint('role_bp',__name__)
 
 role_blueprint.route('/',methods=['POST'])(save)
-# customer_blueprint.route('/', methods=['GET'])(find_all)
-# # need to add find_all_paginate
+role_blueprint.route('/', methods=['GET'])(find_all)
 
-# customer_blueprint.route('/login',methods=['POST'])(login)
-# customer_blueprint.route('/<int:id>',methods=['DELETE'])(delete_customer)
+role_blueprint.route('/<int:id>',methods=['DELETE'])(delete_role)
 
-# customer_blueprint.route('/<int:id>',methods=['PUT'])(update_customer)
+role_blueprint.route('/<int:id>',methods=['PUT'])(update_role)

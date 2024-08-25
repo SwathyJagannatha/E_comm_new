@@ -46,38 +46,27 @@ def find_all():
     all_roles = db.session.execute(query).scalars().all()
     return all_roles
 
-# def search_product(search_term):
-#     query = select(Product).where(Product.name.like(f'%{search_term}%'))
-#     search_products = db.session.execute(query).scalars().all()
-#     return search_products
+def delete_role(id):
+    query = select(Role).where(Role.id == id)
+    role = db.session.execute(query).scalar()
 
-# def delete_product(id):
-#     query = select(Product).where(Product.id == id)
-#     prod = db.session.execute(query).scalar()
-
-#     if prod:
-#         # Delete all associations from the order_product table where product_id matches
-#         db.session.execute(
-#             delete(order_product).where(order_product.c.product_id == id)
-#         )
-
-#         db.session.delete(prod)
-#         db.session.commit()
-#         return prod
-#     else:
-#         return None
+    if role:
+        db.session.delete(role)
+        db.session.commit()
+        return role
+    else:
+        return None
     
-# def update_product(id,data):
-#     try:
-#         query = select(Product).where(Product.id == id)
-#         prod = db.session.execute(query).scalar()
-#         prod.name = data.get("name",prod.name)
-#         prod.price = data.get("price",prod.price)
+def update_role(id,data):
+    try:
+        query = select(Role).where(Role.id == id)
+        role = db.session.execute(query).scalar()
+        role.role_name = data.get("role_name",role.role_name)
 
-#         db.session.commit()
-#         return prod
-#     except:
-#         return None
+        db.session.commit()
+        return role
+    except:
+        return None
     
 
 

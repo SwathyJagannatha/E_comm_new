@@ -16,4 +16,30 @@ def save(): #name the controller will always be the same as the service function
         return jsonify(e.messages), 400
     
     role_saved = roleService.save(role_data)
-    return role_schema.jsonify(role_data), 201
+    return role_schema.jsonify(role_saved), 201
+
+@cache.cached(timeout=60)
+def find_all():
+    all_roles = roleService.find_all()
+    return roles_schema.jsonify(all_roles),200
+
+def delete_role(id):
+    role=roleService.delete_role(id)
+    if role:
+       return role_schema.jsonify(role),200
+    else:
+        return jsonify({"message": "Sorry,Role not found!!"}),404
+    
+def update_role(id): #name the controller will always be the same as the service function
+    try:
+        data = request.json
+        #try to validate the incoming data, and deserialize
+        role=roleService.update_role(id,data)
+
+        if not role:
+            return jsonify({"message": "Sorry,role not found!!"}),404
+        else:
+            return role_schema.jsonify(role), 201
+        
+    except ValidationError as e:
+        return jsonify(e.messages), 400

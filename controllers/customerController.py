@@ -27,7 +27,7 @@ def save(): #name the controller will always be the same as the service function
         return jsonify(e.messages), 400
     
     customer_saved = customerService.save(customer_data)
-    return customer_schema.jsonify(customer_data), 201
+    return customer_schema.jsonify(customer_saved), 201
 
 #@admin_required
 @cache.cached(timeout=60)
