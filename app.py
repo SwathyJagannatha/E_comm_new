@@ -29,7 +29,7 @@ def create_app(config_name):
     app.config.from_object(f'config.{config_name}')
     db.init_app(app)
     ma.init_app(app)
-    limiter.init_app(app)
+    #limiter.init_app(app)
     cache.init_app(app)
 
     print('Running')
@@ -53,7 +53,7 @@ def rate_limit_config():
 app = create_app('ProductionConfig')
 
 with app.app_context():
-        #db.drop_all()
+        db.drop_all()
         db.create_all()
 
 # app = create_app('DevelopmentConfig')

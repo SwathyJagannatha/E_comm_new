@@ -8,7 +8,7 @@ def save():
     try:
         product_data = product_schema.load(request.json)
     except ValidationError as err:
-        return jsonify(err.message),400
+        return jsonify(err.messages),400
     
     try:
         product_save = productService.save(product_data)
