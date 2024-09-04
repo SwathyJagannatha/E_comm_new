@@ -6,7 +6,7 @@ info:
 # host: "127.0.0.1:5000" #working on local host
 host: "e-comm-new-1.onrender.com"
 schemes:
-  - "http"
+  - "https"
 consumes:
   - "application/json"
 produces:

@@ -4,6 +4,7 @@ from models.schemas import ma
 from limiter import limiter
 from caching import cache
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 from models.customer import Customer
 from models.product import Product
@@ -25,7 +26,8 @@ swagger_blueprint = get_swaggerui_blueprint(SWAGGER_URL,API_URL,config={'app_nam
 def create_app(config_name):
 
     app = Flask(__name__)
-
+    CORS(app)
+    
     app.config.from_object(f'config.{config_name}')
     db.init_app(app)
     ma.init_app(app)

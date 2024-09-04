@@ -3,9 +3,10 @@ cachelib==0.9.0
 click==8.1.7
 colorama==0.4.6
 Deprecated==1.2.14
-Faker==27.0.0
+Faker==27.4.0
 Flask==3.0.3
 Flask-Caching==2.3.0
+Flask-Cors==4.0.1
 Flask-Limiter==3.8.0
 flask-marshmallow==1.2.1
 Flask-SQLAlchemy==3.1.1
