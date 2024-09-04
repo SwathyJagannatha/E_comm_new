@@ -3,7 +3,8 @@ info:
   title: "API name"
   description: "Brief description"
   version: "1.0.0"
-host: "127.0.0.1:5000" #working on local host
+# host: "127.0.0.1:5000" #working on local host
+host: "e-comm-new-1.onrender.com"
 schemes:
   - "http"
 consumes:
@@ -92,12 +93,13 @@ paths:
 
   /customers:
     post:
-      post:
-    summary: "Create a new customer"
-    description: "This endpoint allows you to create a new customer."
-    requestBody:
-      required: true
-      content:
+      tags:
+        - Customers # what category this request belongs to
+      summary: "Create a new customer"
+      description: "This endpoint allows you to create a new customer."
+      requestBody:
+        required: true
+        content:
         application/json:
           schema:
             type: object
@@ -120,11 +122,11 @@ paths:
               role_id:
                 type: integer
                 example: 1
-    responses:
-      '201':
-        description: "Customer created successfully"
-      '400':
-        description: "Invalid input"
+      esponses:
+        '201':
+          description: "Customer created successfully"
+        '400':
+          description: "Invalid input"
 
     get:
       tags:
@@ -141,12 +143,14 @@ paths:
 
   /customeraccnt:
     post:
-    summary: "Create a new customer account"
-    description: "This endpoint allows you to create a new customer account."
-    requestBody:
-      required: true
-      content:
-        application/json:
+      tags:
+        - CustomerAccnt # what category this request belongs to
+      summary: "Create a new customer account"
+      description: "This endpoint allows you to create a new customer account."
+      requestBody:
+        required: true
+        content:
+         application/json:
           schema:
             type: object
             properties:
@@ -159,11 +163,15 @@ paths:
               customer_id:
                 type: integer
                 example: 1
-    responses:
-      '201':
-        description: "Customer account created successfully"
-      '400':
-        description: "Invalid input"
+      responses:
+        201:
+          description: "Customer account created successfully"
+          schema:
+            $ref: "#/definitions/AllCustomerAccounts"
+        400:
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     get:
       tags:
@@ -389,11 +397,12 @@ paths:
           description: "Role not found"
 
   /orders:
-
     post:
-    summary: "Create a new order"
-    description: "This endpoint allows you to create a new order."
-    requestBody:
+      tags:
+        - Orders
+      summary: "Create a new order"
+      description: "This endpoint allows you to create a new order."
+      requestBody:
       required: true
       content:
         application/json:
@@ -412,7 +421,7 @@ paths:
                 items:
                   type: integer
                 example: [1, 2, 3]
-    responses:
+      responses:
       '201':
         description: "Order created successfully"
       '400':
